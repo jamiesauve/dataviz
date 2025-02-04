@@ -1,0 +1,8 @@
+body {
+  min-height: 100vh;
+}
+
+.plot-container {
+  display: flex;
+  justify-content: center;
+}
