@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import ReactDOM from 'react-dom/client';
+import { useState } from 'react';
 import GraphContainer from './components/GraphContainer'
 import UserControls from './components/UserControls';
 import { AxisSelections } from './types/graph';
@@ -32,13 +31,3 @@ export const AppContent = () => {
     </div>
   );
 };
-
-// Only run in browser, not during tests
-if (typeof document !== 'undefined') {
-  const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
-  root.render(
-    <React.StrictMode>
-      <AppContent />
-    </React.StrictMode>
-  );
-}
