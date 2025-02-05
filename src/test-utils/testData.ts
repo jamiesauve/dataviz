@@ -1,7 +1,7 @@
 import { AxisOption, AxisSelections } from '../types/graph';
 
 const generateMockData = (value: number) =>
-  Array.from({ length: 50 }, () => value);
+  Array.from({ length: 500 }, () => value);
 
 export const mockAxisData = {
   a: generateMockData(5),

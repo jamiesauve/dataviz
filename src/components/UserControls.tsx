@@ -1,5 +1,6 @@
 import React from 'react';
 import { AxisOption, AxisSelections } from '../types/graph';
+import { useDataGenerator } from '../contexts/DataGeneratorContext';
 
 interface UserControlsProps {
   axisSelections: AxisSelections;
@@ -10,6 +11,7 @@ const UserControls: React.FC<UserControlsProps> = ({
   axisSelections,
   onAxisChange,
 }) => {
+  const { reclusterData } = useDataGenerator();
   const { xAxis, yAxis, zAxis } = axisSelections;
 
   const allOptions: AxisOption[] = ['a', 'b', 'c', 'd', 'e'];
@@ -27,6 +29,11 @@ const UserControls: React.FC<UserControlsProps> = ({
       ...axisSelections,
       [axis]: value
     });
+  };
+
+  const handleRecluster = () => {
+    const selectedDimensions = [xAxis, yAxis, zAxis];
+    reclusterData(selectedDimensions);
   };
 
   return (
@@ -103,6 +110,21 @@ const UserControls: React.FC<UserControlsProps> = ({
             ))}
           </select>
         </div>
+
+        <button
+          type="button"
+          onClick={handleRecluster}
+          style={{
+            padding: '8px',
+            borderRadius: '4px',
+            border: '1px solid #ccc',
+            backgroundColor: '#f0f0f0',
+            cursor: 'pointer',
+            marginTop: '10px'
+          }}
+        >
+          Recluster Points
+        </button>
       </form>
     </div>
   );

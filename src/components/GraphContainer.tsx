@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Plot from 'react-plotly.js';
-import useDataGenerator from '../utils/GenerateData';
+import { useDataGenerator } from '../contexts/DataGeneratorContext';
 import { AxisSelections } from '../types/graph';
 
 interface GraphContainerProps {
@@ -16,13 +16,13 @@ const GraphContainer: React.FC<GraphContainerProps> = ({
   // Generate initial data on mount
   useEffect(() => {
     generateNewData();
-  }, []);
+  }, [generateNewData]);
 
   const data = getData();
 
   const getAxisData = (axisSelection: keyof typeof axisSelections) => {
     const selection = axisSelections[axisSelection];
-    return selection ? data.map(point => point.values[selection]) : data.map(point => point.x);
+    return data.map(point => point.values[selection || 'a']);
   };
 
   return (
@@ -35,8 +35,8 @@ const GraphContainer: React.FC<GraphContainerProps> = ({
           y: getAxisData('yAxis'),
           z: getAxisData('zAxis'),
           marker: {
-            size: 5,
-            color: data.map(point => point.values.e),
+            size: 10,
+            color: data.map(point => point.cluster),
             colorscale: 'Viridis',
             opacity: 0.8
           },
@@ -46,7 +46,8 @@ const GraphContainer: React.FC<GraphContainerProps> = ({
             `B: ${point.values.b.toFixed(2)}<br>` +
             `C: ${point.values.c.toFixed(2)}<br>` +
             `D: ${point.values.d.toFixed(2)}<br>` +
-            `E: ${point.values.e.toFixed(2)}`
+            `E: ${point.values.e.toFixed(2)}<br>` +
+            `Cluster: ${point.cluster}`
           ),
           hoverinfo: 'text'
         }]}
