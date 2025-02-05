@@ -14,13 +14,6 @@ const AppContent = () => {
     yAxis: 'b',
     zAxis: 'c'
   });
-  const [showPlot, setShowPlot] = useState(false);
-
-  const handleShow = () => {
-    if (axisSelections.xAxis && axisSelections.yAxis && axisSelections.zAxis) {
-      setShowPlot(true);
-    }
-  };
 
   return (
     <div style={{
@@ -32,12 +25,11 @@ const AppContent = () => {
       alignItems: 'center'
     }}>
       <div style={{ flex: 1 }}>
-        <GraphContainer axisSelections={axisSelections} showPlot={showPlot} />
+        <GraphContainer axisSelections={axisSelections} />
       </div>
       <UserControls
         axisSelections={axisSelections}
         onAxisChange={setAxisSelections}
-        onShow={handleShow}
       />
     </div>
   );

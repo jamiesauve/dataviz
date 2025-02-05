@@ -5,12 +5,10 @@ import { AxisSelections } from '../types/graph';
 
 interface GraphContainerProps {
   axisSelections: AxisSelections;
-  showPlot: boolean;
 }
 
 const GraphContainer: React.FC<GraphContainerProps> = ({
   axisSelections,
-  showPlot
 }) => {
   const { generateNewData, getData } = useDataGenerator();
   const { xAxis, yAxis, zAxis } = axisSelections;
@@ -33,9 +31,9 @@ const GraphContainer: React.FC<GraphContainerProps> = ({
         data={[{
           type: 'scatter3d',
           mode: 'markers',
-          x: showPlot ? getAxisData('xAxis') : data.map(point => point.x),
-          y: showPlot ? getAxisData('yAxis') : data.map(point => point.y),
-          z: showPlot ? getAxisData('zAxis') : data.map(point => point.z),
+          x: getAxisData('xAxis'),
+          y: getAxisData('yAxis'),
+          z: getAxisData('zAxis'),
           marker: {
             size: 5,
             color: data.map(point => point.values.e),
@@ -53,15 +51,15 @@ const GraphContainer: React.FC<GraphContainerProps> = ({
           hoverinfo: 'text'
         }]}
         layout={{
-          width: Math.min(800, window.innerWidth - 380), // Adjusted to account for UserControls
+          width: Math.min(800, window.innerWidth - 380),
           height: Math.min(window.innerHeight - 40, (window.innerWidth - 380) * 0.75),
-          title: showPlot ? `3D Plot (${xAxis?.toUpperCase() || 'X'} vs ${yAxis?.toUpperCase() || 'Y'} vs ${zAxis?.toUpperCase() || 'Z'})` : '3D Scatter Plot',
+          title: `3D Plot (${xAxis?.toUpperCase() || 'X'} vs ${yAxis?.toUpperCase() || 'Y'} vs ${zAxis?.toUpperCase() || 'Z'})`,
           margin: { t: 50, b: 20, l: 20, r: 20 },
           autosize: true,
           scene: {
             xaxis: {
               title: {
-                text: showPlot ? xAxis?.toUpperCase() || 'X' : 'X',
+                text: xAxis?.toUpperCase() || 'X',
                 font: {
                   size: 12,
                   color: '#7f7f7f'
@@ -70,7 +68,7 @@ const GraphContainer: React.FC<GraphContainerProps> = ({
             },
             yaxis: {
               title: {
-                text: showPlot ? yAxis?.toUpperCase() || 'Y' : 'Y',
+                text: yAxis?.toUpperCase() || 'Y',
                 font: {
                   size: 12,
                   color: '#7f7f7f'
@@ -79,7 +77,7 @@ const GraphContainer: React.FC<GraphContainerProps> = ({
             },
             zaxis: {
               title: {
-                text: showPlot ? zAxis?.toUpperCase() || 'Z' : 'Z',
+                text: zAxis?.toUpperCase() || 'Z',
                 font: {
                   size: 12,
                   color: '#7f7f7f'
@@ -89,8 +87,8 @@ const GraphContainer: React.FC<GraphContainerProps> = ({
           }
         }}
         style={{
-          margin: '0 auto', // Center horizontally
-          display: 'block'  // Ensures margin auto works
+          margin: '0 auto',
+          display: 'block'
         }}
       />
     </div>

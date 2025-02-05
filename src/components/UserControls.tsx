@@ -4,13 +4,11 @@ import { AxisOption, AxisSelections } from '../types/graph';
 interface UserControlsProps {
   axisSelections: AxisSelections;
   onAxisChange: (selections: AxisSelections) => void;
-  onShow: () => void;
 }
 
 const UserControls: React.FC<UserControlsProps> = ({
   axisSelections,
   onAxisChange,
-  onShow
 }) => {
   const { xAxis, yAxis, zAxis } = axisSelections;
 
@@ -102,24 +100,6 @@ const UserControls: React.FC<UserControlsProps> = ({
             ))}
           </select>
         </div>
-
-        <button
-          type="button"
-          onClick={onShow}
-          disabled={!xAxis || !yAxis || !zAxis}
-          style={{
-            backgroundColor: '#475569',
-            color: 'white',
-            padding: '10px 20px',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: (!xAxis || !yAxis || !zAxis) ? 'not-allowed' : 'pointer',
-            marginTop: '10px',
-            opacity: (!xAxis || !yAxis || !zAxis) ? 0.6 : 1
-          }}
-        >
-          Show
-        </button>
       </form>
     </div>
   );
