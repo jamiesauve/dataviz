@@ -42,8 +42,9 @@ const UserControls: React.FC<UserControlsProps> = ({
         width: '100%',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <label style={{ width: '60px' }}>X-axis:</label>
+          <label htmlFor="x-axis" style={{ width: '60px' }}>X-axis:</label>
           <select
+            id="x-axis"
             value={xAxis}
             onChange={(e) => handleAxisChange('xAxis', e.target.value as AxisOption)}
             style={{
@@ -62,8 +63,9 @@ const UserControls: React.FC<UserControlsProps> = ({
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <label style={{ width: '60px' }}>Y-axis:</label>
+          <label htmlFor="y-axis" style={{ width: '60px' }}>Y-axis:</label>
           <select
+            id="y-axis"
             value={yAxis}
             onChange={(e) => handleAxisChange('yAxis', e.target.value as AxisOption)}
             style={{
@@ -82,8 +84,9 @@ const UserControls: React.FC<UserControlsProps> = ({
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <label style={{ width: '60px' }}>Z-axis:</label>
+          <label htmlFor="z-axis" style={{ width: '60px' }}>Z-axis:</label>
           <select
+            id="z-axis"
             value={zAxis}
             onChange={(e) => handleAxisChange('zAxis', e.target.value as AxisOption)}
             style={{

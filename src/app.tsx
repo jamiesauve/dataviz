@@ -6,9 +6,7 @@ import { AxisSelections } from './types/graph';
 
 import './app.css';
 
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
-
-const AppContent = () => {
+export const AppContent = () => {
   const [axisSelections, setAxisSelections] = useState<AxisSelections>({
     xAxis: 'a',
     yAxis: 'b',
@@ -35,8 +33,12 @@ const AppContent = () => {
   );
 };
 
-root.render(
-  <React.StrictMode>
-    <AppContent />
-  </React.StrictMode>
-);
+// Only run in browser, not during tests
+if (typeof document !== 'undefined') {
+  const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+  root.render(
+    <React.StrictMode>
+      <AppContent />
+    </React.StrictMode>
+  );
+}
