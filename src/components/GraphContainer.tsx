@@ -53,11 +53,40 @@ const GraphContainer: React.FC<GraphContainerProps> = ({
           hoverinfo: 'text'
         }]}
         layout={{
-          width: Math.min(1024, window.innerWidth - 40), // 20px padding on each side
-          height: Math.min(window.innerHeight * 0.8, (window.innerWidth - 40) * 0.75), // 4:3 aspect ratio capped at 80% of viewport height
+          width: Math.min(800, window.innerWidth - 380), // Adjusted to account for UserControls
+          height: Math.min(window.innerHeight - 40, (window.innerWidth - 380) * 0.75),
           title: showPlot ? `3D Plot (${xAxis?.toUpperCase() || 'X'} vs ${yAxis?.toUpperCase() || 'Y'} vs ${zAxis?.toUpperCase() || 'Z'})` : '3D Scatter Plot',
-          margin: { t: 50, b: 20, l: 20, r: 20 }, // Reduced margins
-          autosize: true
+          margin: { t: 50, b: 20, l: 20, r: 20 },
+          autosize: true,
+          scene: {
+            xaxis: {
+              title: {
+                text: showPlot ? xAxis?.toUpperCase() || 'X' : 'X',
+                font: {
+                  size: 12,
+                  color: '#7f7f7f'
+                }
+              }
+            },
+            yaxis: {
+              title: {
+                text: showPlot ? yAxis?.toUpperCase() || 'Y' : 'Y',
+                font: {
+                  size: 12,
+                  color: '#7f7f7f'
+                }
+              }
+            },
+            zaxis: {
+              title: {
+                text: showPlot ? zAxis?.toUpperCase() || 'Z' : 'Z',
+                font: {
+                  size: 12,
+                  color: '#7f7f7f'
+                }
+              }
+            }
+          }
         }}
         style={{
           margin: '0 auto', // Center horizontally

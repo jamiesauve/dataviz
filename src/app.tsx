@@ -10,9 +10,9 @@ const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
 const AppContent = () => {
   const [axisSelections, setAxisSelections] = useState<AxisSelections>({
-    xAxis: '',
-    yAxis: '',
-    zAxis: ''
+    xAxis: 'a',
+    yAxis: 'b',
+    zAxis: 'c'
   });
   const [showPlot, setShowPlot] = useState(false);
 
@@ -23,8 +23,17 @@ const AppContent = () => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-      <GraphContainer axisSelections={axisSelections} showPlot={showPlot} />
+    <div style={{
+      display: 'flex',
+      flexDirection: 'row',
+      height: '100vh',
+      padding: '20px',
+      gap: '20px',
+      alignItems: 'center'
+    }}>
+      <div style={{ flex: 1 }}>
+        <GraphContainer axisSelections={axisSelections} showPlot={showPlot} />
+      </div>
       <UserControls
         axisSelections={axisSelections}
         onAxisChange={setAxisSelections}

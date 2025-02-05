@@ -33,15 +33,15 @@ const UserControls: React.FC<UserControlsProps> = ({
 
   return (
     <div style={{
-      padding: '20px',
       display: 'flex',
       justifyContent: 'flex-end',
+      width: '300px',
     }}>
       <form style={{
         display: 'flex',
         flexDirection: 'column',
         gap: '15px',
-        width: '300px',
+        width: '100%',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <label style={{ width: '60px' }}>X-axis:</label>
@@ -55,7 +55,6 @@ const UserControls: React.FC<UserControlsProps> = ({
               border: '1px solid #ccc'
             }}
           >
-            <option value="">Select X variable</option>
             {getAvailableOptions('xAxis').map(option => (
               <option key={option} value={option}>
                 {option.toUpperCase()}
@@ -76,7 +75,6 @@ const UserControls: React.FC<UserControlsProps> = ({
               border: '1px solid #ccc'
             }}
           >
-            <option value="">Select Y variable</option>
             {getAvailableOptions('yAxis').map(option => (
               <option key={option} value={option}>
                 {option.toUpperCase()}
@@ -97,7 +95,6 @@ const UserControls: React.FC<UserControlsProps> = ({
               border: '1px solid #ccc'
             }}
           >
-            <option value="">Select Z variable</option>
             {getAvailableOptions('zAxis').map(option => (
               <option key={option} value={option}>
                 {option.toUpperCase()}
