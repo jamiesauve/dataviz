@@ -1,6 +1,7 @@
 import React from 'react';
 import { AxisOption, AxisSelections } from '../types/graph';
 import { useDataGenerator } from '../contexts/DataGeneratorContext';
+import { useMetadata } from '../api/hooks/useMetadata';
 
 interface UserControlsProps {
   axisSelections: AxisSelections;
@@ -12,6 +13,7 @@ const UserControls: React.FC<UserControlsProps> = ({
   onAxisChange,
 }) => {
   const { reclusterData } = useDataGenerator();
+  const { refetch } = useMetadata();
   const { xAxis, yAxis, zAxis } = axisSelections;
 
   const allOptions: AxisOption[] = ['a', 'b', 'c', 'd', 'e'];
@@ -124,6 +126,24 @@ const UserControls: React.FC<UserControlsProps> = ({
           }}
         >
           Recluster Points
+        </button>
+
+        <button
+          type="button"
+          onClick={async () => {
+            const result = await refetch();
+            console.log('Metadata result:', result.data);
+          }}
+          style={{
+            padding: '8px',
+            borderRadius: '4px',
+            border: '1px solid #ccc',
+            backgroundColor: '#f0f0f0',
+            cursor: 'pointer',
+            marginTop: '10px'
+          }}
+        >
+          Test API
         </button>
       </form>
     </div>

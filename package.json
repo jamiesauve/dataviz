@@ -21,6 +21,7 @@
     "plotly.js-dist": "^3.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "@tanstack/react-query": "^5.0.0",
     "react-plotly.js": "^2.6.0"
   },
   "devDependencies": {
