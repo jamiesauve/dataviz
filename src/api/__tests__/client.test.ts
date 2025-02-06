@@ -1,4 +1,4 @@
-import { fetchMetadata } from '../client';
+import { fetchMetadata, fetchData } from '../client';
 
 describe('API Client', () => {
   const originalFetch = global.fetch;
@@ -30,5 +30,21 @@ describe('API Client', () => {
     });
 
     await expect(fetchMetadata()).rejects.toThrow('Network response was not ok');
+  });
+
+  it('fetches data with range header', async () => {
+    const mockData = { events: [] };
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve(mockData)
+    });
+
+    await fetchData();
+
+    expect(fetch).toHaveBeenCalledWith('http://localhost:8000/data', {
+      headers: {
+        'Range': 'events=0-499'
+      }
+    });
   });
 }); 

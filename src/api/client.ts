@@ -8,4 +8,16 @@ export async function fetchMetadata() {
     throw new Error('Network response was not ok');
   }
   return response.json();
+}
+
+export async function fetchData() {
+  const response = await fetch(`${BASE_URL}/data`, {
+    headers: {
+      'Range': 'events=0-499'  // Request first 500 events
+    }
+  });
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+  return response.json();
 } 

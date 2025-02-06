@@ -2,6 +2,7 @@ import React from 'react';
 import { AxisOption, AxisSelections } from '../types/graph';
 import { useDataGenerator } from '../contexts/DataGeneratorContext';
 import { useMetadata } from '../api/hooks/useMetadata';
+import { useData } from '../api/hooks/useData';
 
 interface UserControlsProps {
   axisSelections: AxisSelections;
@@ -13,7 +14,8 @@ const UserControls: React.FC<UserControlsProps> = ({
   onAxisChange,
 }) => {
   const { reclusterData } = useDataGenerator();
-  const { refetch } = useMetadata();
+  const { refetch: refetchMetadata } = useMetadata();
+  const { refetch: refetchData } = useData();
   const { xAxis, yAxis, zAxis } = axisSelections;
 
   const allOptions: AxisOption[] = ['a', 'b', 'c', 'd', 'e'];
@@ -131,7 +133,7 @@ const UserControls: React.FC<UserControlsProps> = ({
         <button
           type="button"
           onClick={async () => {
-            const result = await refetch();
+            const result = await refetchMetadata();
             console.log('Metadata result:', result.data);
           }}
           style={{
@@ -143,7 +145,25 @@ const UserControls: React.FC<UserControlsProps> = ({
             marginTop: '10px'
           }}
         >
-          Test API
+          Test Metadata API
+        </button>
+
+        <button
+          type="button"
+          onClick={async () => {
+            const result = await refetchData();
+            console.log('Data result:', result.data);
+          }}
+          style={{
+            padding: '8px',
+            borderRadius: '4px',
+            border: '1px solid #ccc',
+            backgroundColor: '#f0f0f0',
+            cursor: 'pointer',
+            marginTop: '10px'
+          }}
+        >
+          Test Data API
         </button>
       </form>
     </div>
