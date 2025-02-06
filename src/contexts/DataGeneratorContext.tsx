@@ -25,6 +25,14 @@ export const DataGeneratorProvider: React.FC<{ children: React.ReactNode }> = ({
     if (data?.data && data?.features) {
       setDataPoints(data.data as DataPoint[]);
       setFeatures(data.features);
+
+      // Run initial clustering on the first three features
+      const initialDimensions = ['area_msd', 'bright_avg', 'deform'];
+      const clusters = kMeans(data.data as DataPoint[], 6, 10, initialDimensions);
+      setDataPoints((data.data as DataPoint[]).map((point, i) => ({
+        ...point,
+        cluster: clusters[i]
+      })));
     }
   }, [data]);
 
@@ -45,7 +53,7 @@ export const DataGeneratorProvider: React.FC<{ children: React.ReactNode }> = ({
       return rest;
     });
 
-    const clusters = kMeans(pointsForClustering, 5, 10, dimensions);
+    const clusters = kMeans(pointsForClustering, 6, 10, dimensions);
     setDataPoints(dataPoints.map((point, i) => ({
       ...point,
       cluster: clusters[i]

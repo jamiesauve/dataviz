@@ -22,9 +22,9 @@ const UserControls: React.FC<UserControlsProps> = ({
   useEffect(() => {
     if (!isLoading && features.length > 0 && !axisSelections.xAxis) {
       onAxisChange({
-        xAxis: features[0],
-        yAxis: features[1] || features[0],
-        zAxis: features[2] || features[0]
+        xAxis: 'area_msd',
+        yAxis: 'bright_avg',
+        zAxis: 'deform'
       });
     }
   }, [features, axisSelections.xAxis, onAxisChange, isLoading]);
