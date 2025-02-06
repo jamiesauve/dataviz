@@ -1,6 +1,7 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import GraphContainer from '../GraphContainer';
 import { defaultAxisSelections } from '../../test-utils/testData';
+import { renderWithProviders } from '../../test-utils/TestProviders';
 
 // Create mock data
 const mockData = [
@@ -24,20 +25,9 @@ jest.mock('../../utils/GenerateData', () => ({
   })
 }));
 
-// Mock Plotly since it's not compatible with jsdom
-jest.mock('react-plotly.js', () => ({
-  __esModule: true,
-  default: ({ data, layout }: any) => (
-    <div data-testid="mock-plot">
-      <div data-testid="plot-data">{JSON.stringify(data)}</div>
-      <div data-testid="plot-layout">{JSON.stringify(layout)}</div>
-    </div>
-  )
-}));
-
 describe('GraphContainer', () => {
   it('renders plot with correct data based on axis selections', () => {
-    render(<GraphContainer axisSelections={defaultAxisSelections} />);
+    renderWithProviders(<GraphContainer axisSelections={defaultAxisSelections} />);
 
     const plotData = JSON.parse(screen.getByTestId('plot-data').textContent || '');
 
@@ -47,7 +37,7 @@ describe('GraphContainer', () => {
   });
 
   it('updates plot when axis selections change', () => {
-    const { rerender } = render(
+    const { rerender } = renderWithProviders(
       <GraphContainer axisSelections={defaultAxisSelections} />
     );
 

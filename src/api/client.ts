@@ -1,4 +1,6 @@
-const BASE_URL = import.meta.env.VITE_SERVER_URL;
+import { getEnvVar } from '../utils/env';
+
+const BASE_URL = getEnvVar('VITE_SERVER_URL');
 
 export async function fetchMetadata() {
   const response = await fetch(`${BASE_URL}/metadata`);

@@ -1,7 +1,10 @@
 export default {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
-  setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
+  setupFilesAfterEnv: [
+    '<rootDir>/src/test-utils/setup.tsx',
+    '@testing-library/jest-dom'
+  ],
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': '<rootDir>/src/test-utils/styleMock.js',
   },

@@ -1,16 +1,24 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { screen, fireEvent } from '@testing-library/react';
 import UserControls from '../UserControls';
 import { defaultAxisSelections } from '../../test-utils/testData';
+import { useMetadata } from '../../api/hooks/useMetadata';
+import { renderWithProviders } from '../../test-utils/TestProviders';
+
+// Mock the useMetadata hook
+jest.mock('../../api/hooks/useMetadata');
 
 describe('UserControls', () => {
   const mockOnAxisChange = jest.fn();
 
   beforeEach(() => {
     mockOnAxisChange.mockClear();
+    (useMetadata as jest.Mock).mockReturnValue({
+      refetch: jest.fn().mockResolvedValue({ data: { version: '1.0.0' } })
+    });
   });
 
   it('renders all axis selection dropdowns', () => {
-    render(
+    renderWithProviders(
       <UserControls
         axisSelections={defaultAxisSelections}
         onAxisChange={mockOnAxisChange}
@@ -23,7 +31,7 @@ describe('UserControls', () => {
   });
 
   it('calls onAxisChange when selection changes', () => {
-    render(
+    renderWithProviders(
       <UserControls
         axisSelections={defaultAxisSelections}
         onAxisChange={mockOnAxisChange}
@@ -41,7 +49,7 @@ describe('UserControls', () => {
   });
 
   it('displays current axis selections', () => {
-    render(
+    renderWithProviders(
       <UserControls
         axisSelections={defaultAxisSelections}
         onAxisChange={mockOnAxisChange}
@@ -51,5 +59,22 @@ describe('UserControls', () => {
     expect(screen.getByLabelText(/x-axis/i)).toHaveValue('a');
     expect(screen.getByLabelText(/y-axis/i)).toHaveValue('b');
     expect(screen.getByLabelText(/z-axis/i)).toHaveValue('c');
+  });
+
+  it('handles API test button click', async () => {
+    const mockRefetch = jest.fn().mockResolvedValue({ data: { version: '1.0.0' } });
+    (useMetadata as jest.Mock).mockReturnValue({ refetch: mockRefetch });
+
+    renderWithProviders(
+      <UserControls
+        axisSelections={defaultAxisSelections}
+        onAxisChange={() => { }}
+      />
+    );
+
+    const button = screen.getByText(/test api/i);
+    await fireEvent.click(button);
+
+    expect(mockRefetch).toHaveBeenCalled();
   });
 }); 
