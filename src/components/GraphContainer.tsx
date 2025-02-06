@@ -2,6 +2,7 @@ import React from 'react';
 import Plot from 'react-plotly.js';
 import { useDataGenerator } from '../contexts/DataGeneratorContext';
 import { AxisSelections } from '../types/graph';
+import { CELL_TYPE_NAMES, CELL_COLORS } from '../utils/cellTypes';
 
 interface GraphContainerProps {
   axisSelections: AxisSelections;
@@ -23,15 +24,6 @@ interface PlotDataPoint {
   text: string[];
 }
 
-const CELL_TYPES = [
-  'Erythrocyte',
-  'Neutrophil',
-  'Lymphocyte',
-  'Monocyte',
-  'Eosinophil',
-  'Basophil'
-];
-
 const GraphContainer: React.FC<GraphContainerProps> = ({
   axisSelections,
 }) => {
@@ -45,7 +37,7 @@ const GraphContainer: React.FC<GraphContainerProps> = ({
   }
 
   // Create separate traces for each cell type for proper legend
-  const plotData: PlotDataPoint[] = CELL_TYPES.map((cellType, clusterIndex) => ({
+  const plotData: PlotDataPoint[] = CELL_TYPE_NAMES.map((cellType, clusterIndex) => ({
     type: 'scatter3d',
     mode: 'markers',
     x: data.filter(d => d.cluster === clusterIndex).map(d => xAxis ? (d[xAxis] as number) : null),
@@ -53,14 +45,7 @@ const GraphContainer: React.FC<GraphContainerProps> = ({
     z: data.filter(d => d.cluster === clusterIndex).map(d => zAxis ? (d[zAxis] as number) : null),
     marker: {
       size: 5,
-      color: [
-        '#FF4B4B',    // Erythrocyte - Red
-        '#4B4BFF',    // Neutrophil - Blue
-        '#4BFF4B',    // Lymphocyte - Green
-        '#FFB74B',    // Monocyte - Orange
-        '#FF4BFF',    // Eosinophil - Pink
-        '#4BFFFF'     // Basophil - Cyan
-      ][clusterIndex]
+      color: CELL_COLORS[clusterIndex]
     },
     name: cellType,
     showlegend: true,
