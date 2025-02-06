@@ -1,60 +1,96 @@
-interface Point {
-  values: {
-    [key: string]: number;
-  };
-}
-
-interface Centroid {
-  [key: string]: number;
+interface DataPoint {
+  [key: string]: number | undefined;
 }
 
 export function kMeans(
-  data: Point[],
-  k: number = 3,
-  maxIterations: number = 100,
-  dimensions?: string[]
+  data: DataPoint[],
+  k: number = 5,
+  iterations: number = 10,
+  dimensions: string[]
 ): number[] {
-  // Initialize k centroids randomly from the data points
-  const centroids: Centroid[] = data
-    .sort(() => 0.5 - Math.random())
-    .slice(0, k)
-    .map(point => ({ ...point.values }));
+  // Normalize the data for each dimension
+  const dimensionStats = dimensions.map(dim => {
+    const values = data.map(d => d[dim] as number);
+    const min = Math.min(...values);
+    const max = Math.max(...values);
+    return { min, max };
+  });
 
-  const keys = dimensions || Object.keys(data[0].values);
-  let clusters: number[] = new Array(data.length).fill(0);
-  let iterations = 0;
-  let changed = true;
+  // Extract and normalize the values we want to cluster
+  const points = data.map(d =>
+    dimensions.map((dim, i) => {
+      const val = d[dim] as number;
+      const { min, max } = dimensionStats[i];
+      return (val - min) / (max - min || 1); // Normalize to [0,1]
+    })
+  );
 
-  while (changed && iterations < maxIterations) {
-    changed = false;
-    iterations++;
+  // Initialize centroids using k-means++ initialization
+  let centroids = [points[Math.floor(Math.random() * points.length)]];
 
+  while (centroids.length < k) {
+    const distances = points.map(point => {
+      const minDist = Math.min(...centroids.map(c => euclideanDistance(point, c)));
+      return minDist * minDist; // Square the distance
+    });
+
+    const sum = distances.reduce((a, b) => a + b, 0);
+    const probs = distances.map(d => d / sum);
+
+    let r = Math.random();
+    let i = 0;
+    while (r > 0 && i < probs.length) {
+      r -= probs[i];
+      i++;
+    }
+    centroids.push([...points[i - 1]]);
+  }
+
+  // Assign points to clusters
+  const assignments = new Array(points.length).fill(0);
+
+  // Run k-means for specified number of iterations
+  for (let iter = 0; iter < iterations; iter++) {
     // Assign points to nearest centroid
-    data.forEach((point, i) => {
-      const distances = centroids.map(centroid =>
-        keys.reduce(
-          (sum, key) => sum + Math.pow(point.values[key] - centroid[key], 2),
-          0
-        )
-      );
-      const nearestCentroid = distances.indexOf(Math.min(...distances));
+    points.forEach((point, i) => {
+      let minDist = Infinity;
+      let cluster = 0;
 
-      if (clusters[i] !== nearestCentroid) {
-        clusters[i] = nearestCentroid;
-        changed = true;
-      }
+      centroids.forEach((centroid, j) => {
+        const dist = euclideanDistance(point, centroid);
+        if (dist < minDist) {
+          minDist = dist;
+          cluster = j;
+        }
+      });
+
+      assignments[i] = cluster;
     });
 
     // Update centroids
-    centroids.forEach((centroid, i) => {
-      const clusterPoints = data.filter((_, index) => clusters[index] === i);
-      if (clusterPoints.length > 0) {
-        Object.keys(centroid).forEach(key => {
-          centroid[key] = clusterPoints.reduce((sum, point) => sum + point.values[key], 0) / clusterPoints.length;
-        });
-      }
+    const newCentroids = Array.from({ length: k }, () =>
+      new Array(dimensions.length).fill(0)
+    );
+    const counts = new Array(k).fill(0);
+
+    points.forEach((point, i) => {
+      const cluster = assignments[i];
+      counts[cluster]++;
+      point.forEach((val, dim) => {
+        newCentroids[cluster][dim] += val;
+      });
     });
+
+    centroids = newCentroids.map((centroid, i) =>
+      centroid.map(sum => sum / (counts[i] || 1))
+    );
   }
 
-  return clusters;
+  return assignments;
+}
+
+function euclideanDistance(a: number[], b: number[]): number {
+  return Math.sqrt(
+    a.reduce((sum, val, i) => sum + Math.pow(val - b[i], 2), 0)
+  );
 } 

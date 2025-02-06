@@ -1,7 +1,7 @@
-export type AxisOption = 'a' | 'b' | 'c' | 'd' | 'e';
+export type AxisOption = string;
 
 export interface AxisSelections {
-  xAxis: AxisOption | '';
-  yAxis: AxisOption | '';
-  zAxis: AxisOption | '';
+  xAxis: AxisOption;
+  yAxis: AxisOption;
+  zAxis: AxisOption;
 } 

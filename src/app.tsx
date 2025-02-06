@@ -11,9 +11,9 @@ const queryClient = new QueryClient();
 
 export const AppContent = () => {
   const [axisSelections, setAxisSelections] = useState<AxisSelections>({
-    xAxis: 'a',
-    yAxis: 'b',
-    zAxis: 'c'
+    xAxis: '',
+    yAxis: '',
+    zAxis: ''
   });
 
   return (

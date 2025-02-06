@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AxisOption, AxisSelections } from '../types/graph';
 import { useDataGenerator } from '../contexts/DataGeneratorContext';
 import { useMetadata } from '../api/hooks/useMetadata';
@@ -13,12 +13,25 @@ const UserControls: React.FC<UserControlsProps> = ({
   axisSelections,
   onAxisChange,
 }) => {
-  const { reclusterData } = useDataGenerator();
+  const { reclusterData, getFeatures, isLoading } = useDataGenerator();
   const { refetch: refetchMetadata } = useMetadata();
   const { refetch: refetchData } = useData();
-  const { xAxis, yAxis, zAxis } = axisSelections;
+  const features = getFeatures();
 
-  const allOptions: AxisOption[] = ['a', 'b', 'c', 'd', 'e'];
+  // Initialize axis selections when features are available
+  useEffect(() => {
+    if (!isLoading && features.length > 0 && !axisSelections.xAxis) {
+      onAxisChange({
+        xAxis: features[0],
+        yAxis: features[1] || features[0],
+        zAxis: features[2] || features[0]
+      });
+    }
+  }, [features, axisSelections.xAxis, onAxisChange, isLoading]);
+
+  const allOptions = features;
+
+  const { xAxis, yAxis, zAxis } = axisSelections;
 
   const getAvailableOptions = (currentAxis: 'xAxis' | 'yAxis' | 'zAxis') => {
     const currentValue = axisSelections[currentAxis];

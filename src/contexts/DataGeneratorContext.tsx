@@ -1,22 +1,59 @@
-import React, { createContext, useContext, ReactNode } from 'react';
-import useDataGeneratorHook from '../utils/GenerateData';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useData } from '../api/hooks/useData';
+import { kMeans } from '../utils/clustering';
+
+interface DataPoint {
+  [key: string]: number | undefined;
+  cluster?: number;
+}
 
 interface DataGeneratorContextType {
-  generateNewData: (props?: { dimensions?: string[] }) => void;
-  getData: () => Array<{
-    values: { [key: string]: number };
-    cluster?: number;
-  }>;
+  getData: () => DataPoint[];
+  getFeatures: () => string[];
   reclusterData: (dimensions: string[]) => void;
+  isLoading: boolean;
 }
 
 const DataGeneratorContext = createContext<DataGeneratorContextType | null>(null);
 
-export const DataGeneratorProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const dataGenerator = useDataGeneratorHook();
+export const DataGeneratorProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [dataPoints, setDataPoints] = useState<DataPoint[]>([]);
+  const [features, setFeatures] = useState<string[]>([]);
+  const { data, isLoading } = useData();
+
+  useEffect(() => {
+    if (data?.data && data?.features) {
+      setDataPoints(data.data as DataPoint[]);
+      setFeatures(data.features);
+    }
+  }, [data]);
+
+  const getData = () => {
+    return dataPoints;
+  };
+
+  const getFeatures = () => {
+    return features;
+  };
+
+  const reclusterData = (dimensions: string[]) => {
+    if (dataPoints.length === 0 || dimensions.some(d => !d)) return;
+
+    // Create a copy of dataPoints without the cluster property for k-means
+    const pointsForClustering = dataPoints.map(point => {
+      const { cluster, ...rest } = point;
+      return rest;
+    });
+
+    const clusters = kMeans(pointsForClustering, 5, 10, dimensions);
+    setDataPoints(dataPoints.map((point, i) => ({
+      ...point,
+      cluster: clusters[i]
+    })));
+  };
 
   return (
-    <DataGeneratorContext.Provider value={dataGenerator}>
+    <DataGeneratorContext.Provider value={{ getData, getFeatures, reclusterData, isLoading }}>
       {children}
     </DataGeneratorContext.Provider>
   );

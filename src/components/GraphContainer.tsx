@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Plot from 'react-plotly.js';
 import { useDataGenerator } from '../contexts/DataGeneratorContext';
 import { AxisSelections } from '../types/graph';
@@ -7,50 +7,54 @@ interface GraphContainerProps {
   axisSelections: AxisSelections;
 }
 
+interface PlotDataPoint {
+  type: 'scatter3d';
+  mode: 'markers';
+  x: (number | null)[];
+  y: (number | null)[];
+  z: (number | null)[];
+  marker: {
+    size: number;
+    color: (number | undefined)[];
+    colorscale: string;
+  };
+}
+
 const GraphContainer: React.FC<GraphContainerProps> = ({
   axisSelections,
 }) => {
-  const { generateNewData, getData } = useDataGenerator();
+  const { getData, isLoading } = useDataGenerator();
   const { xAxis, yAxis, zAxis } = axisSelections;
-
-  // Generate initial data on mount
-  useEffect(() => {
-    generateNewData();
-  }, [generateNewData]);
 
   const data = getData();
 
-  const getAxisData = (axisSelection: keyof typeof axisSelections) => {
-    const selection = axisSelections[axisSelection];
-    return data.map(point => point.values[selection || 'a']);
-  };
+  if (isLoading) {
+    return <div>Loading data...</div>;
+  }
+
+  const plotData: PlotDataPoint[] = [{
+    type: 'scatter3d',
+    mode: 'markers',
+    x: data.map(d => xAxis ? (d[xAxis] as number) : null),
+    y: data.map(d => yAxis ? (d[yAxis] as number) : null),
+    z: data.map(d => zAxis ? (d[zAxis] as number) : null),
+    marker: {
+      size: 5,
+      color: data.map(d => d.cluster ?? 0),
+      colorscale: 'Viridis'
+    }
+  }];
 
   return (
     <div>
       <Plot
-        data={[{
-          type: 'scatter3d',
-          mode: 'markers',
-          x: getAxisData('xAxis'),
-          y: getAxisData('yAxis'),
-          z: getAxisData('zAxis'),
-          marker: {
-            size: 10,
-            color: data.map(point => point.cluster),
-            colorscale: 'Viridis',
-            opacity: 0.8
-          },
-          text: data.map((point, i) =>
-            `Point ${i + 1}<br>` +
-            `A: ${point.values.a.toFixed(2)}<br>` +
-            `B: ${point.values.b.toFixed(2)}<br>` +
-            `C: ${point.values.c.toFixed(2)}<br>` +
-            `D: ${point.values.d.toFixed(2)}<br>` +
-            `E: ${point.values.e.toFixed(2)}<br>` +
-            `Cluster: ${point.cluster}`
-          ),
-          hoverinfo: 'text'
-        }]}
+        config={{
+          toImageButtonOptions: {
+            format: 'svg',
+            filename: '3d_plot'
+          }
+        }}
+        data={plotData}
         layout={{
           width: Math.min(800, window.innerWidth - 380),
           height: Math.min(window.innerHeight - 40, (window.innerWidth - 380) * 0.75),
