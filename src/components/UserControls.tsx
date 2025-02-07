@@ -49,12 +49,6 @@ const UserControls: React.FC<UserControlsProps> = ({
     });
   };
 
-  const handleRecluster = () => {
-    const dimensions = [axisSelections.xAxis, axisSelections.yAxis, axisSelections.zAxis]
-      .filter((dim): dim is string => dim !== null && dim !== '');
-    reclusterData(dimensions);
-  };
-
   return (
     <div className="controls-container">
       <form className="controls-form">
@@ -108,37 +102,6 @@ const UserControls: React.FC<UserControlsProps> = ({
             ))}
           </select>
         </div>
-
-        <button
-          type="button"
-          onClick={handleRecluster}
-          className="recluster-button"
-          disabled={!axisSelections.xAxis || !axisSelections.yAxis || !axisSelections.zAxis}
-        >
-          Recluster Points
-        </button>
-
-        <button
-          type="button"
-          onClick={async () => {
-            const result = await refetchMetadata();
-            console.log('Metadata result:', result.data);
-          }}
-          className="api-test-button"
-        >
-          Test Metadata API
-        </button>
-
-        <button
-          type="button"
-          onClick={async () => {
-            const result = await refetchData();
-            console.log('Data result:', result.data);
-          }}
-          className="api-test-button"
-        >
-          Test Data API
-        </button>
       </form>
     </div>
   );

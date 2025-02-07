@@ -7,6 +7,7 @@
 .controls-form {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: var(--spacing-lg);
   width: 100%;
 }
@@ -18,7 +19,7 @@
 }
 
 .axis-label {
-  width: 60px;
+  width: 70px;
 }
 
 .axis-select {

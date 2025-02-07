@@ -58,16 +58,7 @@ const Graph2DContainer: React.FC<Graph2DContainerProps> = ({
         color: DARK_THEME.text
       }
     },
-    showlegend: true,
-    legend: {
-      x: 1.1,
-      y: 0.5,
-      bgcolor: DARK_THEME.bg,
-      bordercolor: DARK_THEME.grid,
-      font: {
-        color: DARK_THEME.text
-      }
-    },
+    showlegend: false,
     margin: { l: 50, r: 100, t: 50, b: 50 },
     xaxis: {
       showgrid: true,

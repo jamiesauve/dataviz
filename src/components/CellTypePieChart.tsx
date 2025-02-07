@@ -18,32 +18,43 @@ const CellTypePieChart: React.FC = () => {
     marker: {
       colors: CELL_COLORS
     },
-    textinfo: 'label+percent',
-    hovertemplate: '%{label}<br>Count: %{value}<br>Percentage: %{percent}<extra></extra>',
+    textinfo: 'label+text+percent',
+    hoverinfo: 'label+text+percent',
+    text: CELL_TYPE_NAMES.map((_, index) => {
+      const count = data.filter(d => d.cluster === index).length;
+      return `Count: ${count}`;
+    }),
+    textposition: 'outside',
     textfont: {
-      size: 14,
+      family: 'Chakra Petch',
+      size: 16,
       color: DARK_THEME.text
-    }
+    },
+    automargin: true,
+    direction: 'clockwise',
+    sort: false
   }];
 
   const layout: Partial<Layout> = {
-    width: 300,
-    height: 300,
+    width: 500,
+    height: 420,
     paper_bgcolor: DARK_THEME.bg,
     plot_bgcolor: DARK_THEME.surface,
-    margin: { t: 30, b: 30, l: 30, r: 30 },
+    margin: { t: 100, b: 30, l: 50, r: 50 },
     showlegend: false,
     title: {
       text: 'Cell Type Distribution',
       font: {
-        size: 16,
+        family: 'Chakra Petch',
+        size: 24,
         color: DARK_THEME.text
-      }
+      },
+      y: 0.98,
     }
   };
 
   return (
-    <div className="pie-chart-container">
+    <div>
       <Plot
         data={plotData}
         layout={layout}

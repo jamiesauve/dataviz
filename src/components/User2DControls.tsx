@@ -13,7 +13,7 @@ const User2DControls: React.FC<User2DControlsProps> = ({
   yAxis,
   onAxisChange,
 }) => {
-  const { getFeatures, isLoading, reclusterData } = useDataGenerator();
+  const { getFeatures, isLoading } = useDataGenerator();
   const features = getFeatures();
 
   useEffect(() => {
@@ -24,12 +24,6 @@ const User2DControls: React.FC<User2DControlsProps> = ({
       });
     }
   }, [features, xAxis, yAxis, onAxisChange, isLoading]);
-
-  const handleRecluster = () => {
-    if (xAxis && yAxis) {
-      reclusterData([xAxis, yAxis]);
-    }
-  };
 
   const allOptions = features;
 
@@ -77,15 +71,6 @@ const User2DControls: React.FC<User2DControlsProps> = ({
             ))}
           </select>
         </div>
-
-        <button
-          type="button"
-          onClick={handleRecluster}
-          className="recluster-button"
-          disabled={!xAxis || !yAxis}
-        >
-          Recluster Points
-        </button>
       </form>
     </div>
   );
