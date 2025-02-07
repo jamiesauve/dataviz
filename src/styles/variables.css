@@ -19,19 +19,19 @@
   --color-button-hover: #333333;
   /* Slightly lighter than surface */
 
-  /* Cell type colors - cyberpunk variants */
+  /* Cell type colors - using the same values as colors.ts */
   --cell-color-0: #FF1493;
-  /* Erythrocytes - Hot pink */
-  --cell-color-1: #FF8C00;
-  /* Platelets - Vibrant orange */
+  /* Hot pink - Erythrocytes */
+  --cell-color-1: #9932CC;
+  /* Bright purple - Neutrophils */
   --cell-color-2: #39FF14;
-  /* Lymphocytes - Neon green */
+  /* Neon green - Lymphocytes */
   --cell-color-3: #FFFF00;
-  /* Monocytes - Bright yellow */
+  /* Bright yellow - Monocytes */
   --cell-color-4: #FF0000;
-  /* Eosinophils - Pure red */
-  --cell-color-5: #9932CC;
-  /* Neutrophils - Bright purple */
+  /* Pure red - Eosinophils */
+  --cell-color-5: #FF8C00;
+  /* Vibrant orange - Basophils */
 
   /* Spacing - Multiples of 4px */
   --spacing-xs: 4px;

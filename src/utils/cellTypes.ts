@@ -1,3 +1,5 @@
+import { COLORS } from './colors';
+
 export interface CellTypeInfo {
   name: string;
   color: string;
@@ -13,7 +15,7 @@ export interface CellTypeInfo {
 export const CELL_TYPES: { [key: string]: CellTypeInfo } = {
   erythrocyte: {
     name: 'Erythrocyte',
-    color: '#FF4B4B',
+    color: COLORS.cellTypes.erythrocyte,
     naturalFrequency: 0.97,  // ~97% of blood cells
     characteristics: {
       area_msd: { mean: 40, stdDev: 5 },    // These values are placeholders
@@ -23,7 +25,7 @@ export const CELL_TYPES: { [key: string]: CellTypeInfo } = {
   },
   neutrophil: {
     name: 'Neutrophil',
-    color: '#4B4BFF',
+    color: COLORS.cellTypes.neutrophil,
     naturalFrequency: 0.02,  // ~2%
     characteristics: {
       area_msd: { mean: 80, stdDev: 10 },
@@ -33,7 +35,7 @@ export const CELL_TYPES: { [key: string]: CellTypeInfo } = {
   },
   lymphocyte: {
     name: 'Lymphocyte',
-    color: '#4BFF4B',
+    color: 'var(--cell-color-2)',  // Neon green
     naturalFrequency: 0.005,  // ~0.5%
     characteristics: {
       area_msd: { mean: 60, stdDev: 8 },
@@ -43,7 +45,7 @@ export const CELL_TYPES: { [key: string]: CellTypeInfo } = {
   },
   monocyte: {
     name: 'Monocyte',
-    color: '#FFB74B',
+    color: 'var(--cell-color-3)',  // Bright yellow
     naturalFrequency: 0.003,  // ~0.3%
     characteristics: {
       area_msd: { mean: 90, stdDev: 12 },
@@ -53,7 +55,7 @@ export const CELL_TYPES: { [key: string]: CellTypeInfo } = {
   },
   eosinophil: {
     name: 'Eosinophil',
-    color: '#FF4BFF',
+    color: 'var(--cell-color-4)',  // Pure red
     naturalFrequency: 0.001,  // ~0.1%
     characteristics: {
       area_msd: { mean: 70, stdDev: 9 },
@@ -63,7 +65,7 @@ export const CELL_TYPES: { [key: string]: CellTypeInfo } = {
   },
   basophil: {
     name: 'Basophil',
-    color: '#4BFFFF',
+    color: 'var(--cell-color-1)',  // Vibrant orange
     naturalFrequency: 0.001,  // ~0.1%
     characteristics: {
       area_msd: { mean: 65, stdDev: 8 },
@@ -79,9 +81,7 @@ export const CELL_TYPE_NAMES = [
   'Lymphocytes',
   'Monocytes',
   'Eosinophils',
-  'Neutrophils'
+  'Basophils'
 ] as const;
 
-export const CELL_COLORS = CELL_TYPE_NAMES.map((_, i) =>
-  getComputedStyle(document.documentElement).getPropertyValue(`--cell-color-${i}`).trim()
-); 
+export { CELL_COLORS } from './colors'; 
