@@ -74,19 +74,14 @@ export const CELL_TYPES: { [key: string]: CellTypeInfo } = {
 };
 
 export const CELL_TYPE_NAMES = [
-  'Erythrocyte',
-  'Neutrophil',
-  'Lymphocyte',
-  'Monocyte',
-  'Eosinophil',
-  'Basophil'
-];
+  'Erythrocytes',
+  'Neutrophils',
+  'Lymphocytes',
+  'Monocytes',
+  'Eosinophils',
+  'Neutrophils'
+] as const;
 
-export const CELL_COLORS = [
-  'var(--cell-color-1)',  // Neon pink
-  'var(--cell-color-2)',  // Cyan
-  'var(--cell-color-3)',  // Neon orange
-  'var(--cell-color-4)',  // Purple
-  'var(--cell-color-5)',  // Yellow
-  'var(--cell-color-6)',  // Lime
-]; 
+export const CELL_COLORS = CELL_TYPE_NAMES.map((_, i) =>
+  getComputedStyle(document.documentElement).getPropertyValue(`--cell-color-${i}`).trim()
+); 

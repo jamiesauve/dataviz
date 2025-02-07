@@ -12,3 +12,12 @@
   font-size: 12px;
   color: var(--color-text-muted);
 }
+
+.plot-2d-container {
+  display: flex;
+  justify-content: center;
+}
+
+.plot-2d-background {
+  background: var(--color-bg);
+}

@@ -20,18 +20,18 @@
   /* Slightly lighter than surface */
 
   /* Cell type colors - cyberpunk variants */
-  --cell-color-1: #ff4081;
-  /* Neon pink */
-  --cell-color-2: #00ffc8;
-  /* Cyan */
-  --cell-color-3: #ff9100;
-  /* Neon orange */
-  --cell-color-4: #7c4dff;
-  /* Purple */
-  --cell-color-5: #ffeb3b;
-  /* Yellow */
-  --cell-color-6: #76ff03;
-  /* Lime */
+  --cell-color-0: #FF1493;
+  /* Erythrocytes - Hot pink */
+  --cell-color-1: #FF8C00;
+  /* Platelets - Vibrant orange */
+  --cell-color-2: #39FF14;
+  /* Lymphocytes - Neon green */
+  --cell-color-3: #FFFF00;
+  /* Monocytes - Bright yellow */
+  --cell-color-4: #FF0000;
+  /* Eosinophils - Pure red */
+  --cell-color-5: #9932CC;
+  /* Neutrophils - Bright purple */
 
   /* Spacing - Multiples of 4px */
   --spacing-xs: 4px;

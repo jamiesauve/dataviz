@@ -1,22 +1,24 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
-import { Data, Layout } from 'plotly.js';
+import { Data, Layout, Config, ModeBarDefaultButtons } from 'plotly.js';
 import { useDataGenerator } from '../contexts/DataGeneratorContext';
 import { CELL_TYPE_NAMES, CELL_COLORS } from '../utils/cellTypes';
 import { DARK_THEME } from '../utils/plotTheme';
+import { AxisSelections } from '../types/graph';
 import './GraphContainer.css';
 
 interface GraphContainerProps {
-  axisSelections: {
-    xAxis: string | null;
-    yAxis: string | null;
-    zAxis: string | null;
-  };
+  axisSelections: AxisSelections;
+}
+
+interface DataPoint {
+  cluster: number;
+  [key: string]: number | string;
 }
 
 const GraphContainer: React.FC<GraphContainerProps> = ({ axisSelections }) => {
   const { getData, isLoading } = useDataGenerator();
-  const data = getData();
+  const data = getData() as DataPoint[];
 
   if (isLoading) {
     return <div>Loading data...</div>;
@@ -27,9 +29,15 @@ const GraphContainer: React.FC<GraphContainerProps> = ({ axisSelections }) => {
   const plotData: Data[] = CELL_TYPE_NAMES.map((cellType, clusterIndex) => ({
     type: 'scatter3d' as const,
     mode: 'markers' as const,
-    x: data.filter(d => d.cluster === clusterIndex).map(d => xAxis ? (d[xAxis] as number) : null),
-    y: data.filter(d => d.cluster === clusterIndex).map(d => yAxis ? (d[yAxis] as number) : null),
-    z: data.filter(d => d.cluster === clusterIndex).map(d => zAxis ? (d[zAxis] as number) : null),
+    x: data
+      .filter(d => d.cluster === clusterIndex)
+      .map(d => xAxis ? Number(d[xAxis]) : 0),
+    y: data
+      .filter(d => d.cluster === clusterIndex)
+      .map(d => yAxis ? Number(d[yAxis]) : 0),
+    z: data
+      .filter(d => d.cluster === clusterIndex)
+      .map(d => zAxis ? Number(d[zAxis]) : 0),
     marker: {
       size: 7,
       color: CELL_COLORS[clusterIndex],
@@ -68,7 +76,8 @@ const GraphContainer: React.FC<GraphContainerProps> = ({ axisSelections }) => {
       bgcolor: DARK_THEME.bg,
       bordercolor: DARK_THEME.grid,
       font: {
-        color: DARK_THEME.text
+        color: DARK_THEME.text,
+        size: 16
       }
     },
     margin: { l: 50, r: 100, t: 50, b: 50 },
@@ -125,22 +134,25 @@ const GraphContainer: React.FC<GraphContainerProps> = ({ axisSelections }) => {
     }
   };
 
+
+  const config: Partial<Config> = {
+    displayModeBar: true,
+    displaylogo: false,
+    modeBarButtonsToRemove: ['select3d', 'lasso3d'] as unknown as ModeBarDefaultButtons[],
+    toImageButtonOptions: {
+      format: 'svg' as const,
+      filename: '3d_plot'
+    },
+    responsive: true
+  };
+
   return (
     <div className="plot-container">
       <Plot
         data={plotData}
         layout={layout}
-        config={{
-          displayModeBar: true,
-          displaylogo: false,
-          modeBarButtonsToRemove: ['lasso3d', 'select3d'],
-          toImageButtonOptions: {
-            format: 'svg',
-            filename: '3d_plot'
-          },
-          responsive: true
-        }}
-        style={{ background: DARK_THEME.bg }}
+        config={config}
+        className="plot-background"
       />
     </div>
   );

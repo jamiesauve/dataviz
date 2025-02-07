@@ -1,4 +1,8 @@
+.plot-background {
+  background: var(--color-bg);
+}
+
 .plot-container {
-  margin: 0 auto;
-  display: block;
+  display: flex;
+  justify-content: center;
 }
