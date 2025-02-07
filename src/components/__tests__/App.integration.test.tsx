@@ -1,5 +1,5 @@
 import { screen, fireEvent } from '@testing-library/react';
-import { AppContent } from '../../app';
+import { AppContent } from '../../App';
 import { renderWithProviders } from '../../test-utils/TestProviders';
 
 jest.mock('../../api/hooks/useMetadata', () => ({

@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { AppContent } from '../../app';
+import { AppContent } from '../../App';
 
 // Mock child components
 jest.mock('../GraphContainer', () => ({
