@@ -11,7 +11,7 @@ export function kMeans(
   dimensions: string[]
 ): number[] {
   // Normalize the data for each dimension
-  const dimensionStats = dimensions.map(dim => {
+  const normalizationStats = dimensions.map(dim => {
     const values = data.map(d => d[dim] as number);
     const min = Math.min(...values);
     const max = Math.max(...values);
@@ -22,20 +22,43 @@ export function kMeans(
   const points = data.map(d =>
     dimensions.map((dim, i) => {
       const val = d[dim] as number;
-      const { min, max } = dimensionStats[i];
+      const { min, max } = normalizationStats[i];
       return (val - min) / (max - min || 1);
     })
   );
 
-  // Initialize centroids deterministically
+  // Initialize centroids using data statistics
   let centroids: number[][] = [];
+
+  // Calculate statistics for centroid initialization
+  const centroidStats = points.map((_, dimIndex) => {
+    const values = points.map(p => p[dimIndex]);
+    const sorted = values.sort((a, b) => a - b);
+    return {
+      min: sorted[0],
+      max: sorted[sorted.length - 1],
+      median: sorted[Math.floor(sorted.length / 2)]
+    };
+  });
+
+  // Initialize centroids with controlled spacing
   for (let i = 0; i < k; i++) {
     const centroid = dimensions.map((_, dimIndex) => {
-      // Spread centroids evenly across the normalized space
-      // Add some offset based on other dimensions to make them unique
-      const baseValue = (i + 1) / (k + 1);
-      const offset = dimIndex * 0.1;
-      return (baseValue + offset) % 1;
+      const { min, max } = centroidStats[dimIndex];
+      const range = max - min;
+
+      // Create an offset that depends on both cluster index and dimension
+      const phase = (dimIndex + 1) / dimensions.length;
+      const position = (i + phase) / k;
+
+      // Use sigmoid distribution for non-linear spacing
+      const sigmoid = 1 / (1 + Math.exp(-6 * (position - 0.5)));
+      const value = min + range * sigmoid;
+
+      // Add tiny deterministic variation
+      const variation = 0.05 * range * Math.cos(Math.PI * position * (dimIndex + 1));
+
+      return value + variation;
     });
     centroids.push(centroid);
   }
@@ -83,7 +106,7 @@ export function kMeans(
   // Sort clusters by their first dimension average
   const clusterStats = centroids.map((centroid, index) => ({
     index,
-    value: centroid[0]  // Use first dimension (typically area_msd) for sorting
+    value: centroid[0]
   }));
 
   clusterStats.sort((a, b) => b.value - a.value);
@@ -112,7 +135,7 @@ export function assignCellTypes(
 ): number[] {
   return data.map(point => {
     // Calculate probability of point belonging to each cell type
-    const probabilities = Object.values(CELL_TYPES).map((cellType, index) => {
+    const probabilities = Object.values(CELL_TYPES).map((cellType) => {
       // Multiply probabilities from each dimension
       const dimensionProbabilities = dimensions.map(dim => {
         const characteristic = cellType.characteristics[dim];
@@ -133,19 +156,3 @@ export function assignCellTypes(
     return probabilities.indexOf(Math.max(...probabilities));
   });
 }
-
-function getClusterCharacteristic(points: number[][], dimensions: string[]): number {
-  // Calculate average values for each dimension
-  const dimensionAverages = points[0].map((_, dimIndex) => {
-    const values = points.map(p => p[dimIndex]);
-    return values.reduce((a, b) => a + b, 0) / values.length;
-  });
-
-  // Weight the dimensions differently to create a unique signature
-  // area_msd gets highest weight, then deform, then brightness
-  const weights = [1.0, 0.5, 0.3];
-
-  // Combine the weighted averages
-  return dimensionAverages.reduce((sum, avg, i) =>
-    sum + avg * (weights[i] || 0.1), 0);
-} 

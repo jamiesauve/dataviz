@@ -11,7 +11,6 @@ export async function fetchMetadata() {
 }
 
 export async function fetchData() {
-  console.log('Fetching data from:', `${BASE_URL}/data`);
   const response = await fetch(`${BASE_URL}/data`, {
     headers: {
       'Range': 'events=0-499'  // Request first 500 events
@@ -22,6 +21,6 @@ export async function fetchData() {
     throw new Error('Network response was not ok');
   }
   const data = await response.json();
-  console.log('Received data:', data);
+
   return data;
 } 

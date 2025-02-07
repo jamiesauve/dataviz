@@ -6,6 +6,6 @@ export function useData() {
     queryKey: ['data'],
     queryFn: fetchData
   });
-  console.log('useData hook result:', { data: query.data, isLoading: query.isLoading });
+
   return query;
 } 
