@@ -10,6 +10,7 @@ import CellTypePieChart from './components/CellTypePieChart';
 import { useClusterStats } from './hooks/useClusterStats';
 import { ClusterStat } from './types/stats';
 import CellTypeStats from './components/CellTypeStats';
+import Logo from './components/Logo';
 
 import './app.css';
 import './styles/variables.css';
@@ -34,6 +35,7 @@ export const AppContent: React.FC = () => {
 
   return (
     <div className="app-container">
+      <Logo />
       <div className="main-content">
         <div className="stats-section">
           <CellTypePieChart />

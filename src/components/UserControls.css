@@ -1,12 +1,11 @@
 .controls-container {
   display: flex;
-  justify-content: flex-end;
-  width: var(--control-width);
+  flex-direction: row;
 }
 
 .controls-form {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   gap: var(--spacing-lg);
   width: 100%;

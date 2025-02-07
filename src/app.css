@@ -18,6 +18,14 @@ body {
 .app-container {
   padding: 20px;
   font-family: 'Share Tech Mono', system-ui, -apple-system, sans-serif;
+  position: relative;
+}
+
+.logo-container {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 1;
 }
 
 .header-section {
@@ -43,6 +51,13 @@ body {
 .plot-controls-layout {
   display: flex;
   gap: var(--spacing-lg);
+
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    align-items: center;
+  }
 }
 
 .tab-button {
@@ -78,10 +93,12 @@ body {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  margin-top: 80px;
 }
 
 .plot-controls-container {
   display: flex;
+  justify-content: center;
   gap: var(--spacing-xl);
 }
 

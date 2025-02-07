@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { useDataGenerator } from '../contexts/DataGeneratorContext';
-import './User2DControls.css';
 
 interface User2DControlsProps {
   xAxis: string | null;
