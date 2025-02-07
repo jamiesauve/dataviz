@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDataGenerator } from '../contexts/DataGeneratorContext';
+import './User2DControls.css';
 
 interface User2DControlsProps {
   xAxis: string | null;
@@ -16,17 +17,18 @@ const User2DControls: React.FC<User2DControlsProps> = ({
   const features = getFeatures();
 
   useEffect(() => {
-    if (!isLoading && features.length > 0 && !xAxis) {
+    if (!isLoading && features.length > 0 && !xAxis && !yAxis) {
       onAxisChange({
-        xAxis: 'area_msd',
-        yAxis: 'bright_avg'
+        xAxis: 'deform',
+        yAxis: 'area_um'
       });
     }
-  }, [features, xAxis, onAxisChange, isLoading]);
+  }, [features, xAxis, yAxis, onAxisChange, isLoading]);
 
   const handleRecluster = () => {
-    const selectedDimensions = [xAxis, yAxis];
-    reclusterData(selectedDimensions);
+    if (xAxis && yAxis) {
+      reclusterData([xAxis, yAxis]);
+    }
   };
 
   const allOptions = features;
@@ -40,30 +42,17 @@ const User2DControls: React.FC<User2DControlsProps> = ({
   };
 
   return (
-    <div style={{
-      display: 'flex',
-      justifyContent: 'flex-end',
-      width: '300px',
-    }}>
-      <form style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '15px',
-        width: '100%',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <label htmlFor="x-axis" style={{ width: '60px' }}>X-axis:</label>
+    <div className="controls-container">
+      <form className="controls-form">
+        <div className="axis-control">
+          <label htmlFor="x-axis" className="axis-label">X-axis:</label>
           <select
             id="x-axis"
             value={xAxis || ''}
-            onChange={(e) => onAxisChange({ xAxis: e.target.value, yAxis })}
-            style={{
-              flex: 1,
-              padding: '8px',
-              borderRadius: '4px',
-              border: '1px solid #ccc'
-            }}
+            onChange={(e) => onAxisChange({ xAxis: e.target.value || null, yAxis })}
+            className="axis-select"
           >
+            <option value="">Select X Axis</option>
             {getAvailableOptions('xAxis').map(option => (
               <option key={option} value={option}>
                 {option.toUpperCase()}
@@ -72,19 +61,15 @@ const User2DControls: React.FC<User2DControlsProps> = ({
           </select>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <label htmlFor="y-axis" style={{ width: '60px' }}>Y-axis:</label>
+        <div className="axis-control">
+          <label htmlFor="y-axis" className="axis-label">Y-axis:</label>
           <select
             id="y-axis"
             value={yAxis || ''}
-            onChange={(e) => onAxisChange({ xAxis, yAxis: e.target.value })}
-            style={{
-              flex: 1,
-              padding: '8px',
-              borderRadius: '4px',
-              border: '1px solid #ccc'
-            }}
+            onChange={(e) => onAxisChange({ xAxis, yAxis: e.target.value || null })}
+            className="axis-select"
           >
+            <option value="">Select Y Axis</option>
             {getAvailableOptions('yAxis').map(option => (
               <option key={option} value={option}>
                 {option.toUpperCase()}
@@ -96,14 +81,8 @@ const User2DControls: React.FC<User2DControlsProps> = ({
         <button
           type="button"
           onClick={handleRecluster}
-          style={{
-            padding: '8px',
-            borderRadius: '4px',
-            border: '1px solid #ccc',
-            backgroundColor: '#f0f0f0',
-            cursor: 'pointer',
-            marginTop: '10px'
-          }}
+          className="recluster-button"
+          disabled={!xAxis || !yAxis}
         >
           Recluster Points
         </button>

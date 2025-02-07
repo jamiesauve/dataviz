@@ -1,0 +1,14 @@
+.plot-container {
+  margin: 0 auto;
+  display: block;
+}
+
+.plot-title {
+  font-size: 14px;
+  color: var(--color-text);
+}
+
+.axis-title {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}

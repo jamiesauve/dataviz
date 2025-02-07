@@ -3,6 +3,7 @@ import { AxisOption, AxisSelections } from '../types/graph';
 import { useDataGenerator } from '../contexts/DataGeneratorContext';
 import { useMetadata } from '../api/hooks/useMetadata';
 import { useData } from '../api/hooks/useData';
+import './UserControls.css';
 
 interface UserControlsProps {
   axisSelections: AxisSelections;
@@ -22,9 +23,9 @@ const UserControls: React.FC<UserControlsProps> = ({
   useEffect(() => {
     if (!isLoading && features.length > 0 && !axisSelections.xAxis) {
       onAxisChange({
-        xAxis: 'area_msd',
+        xAxis: 'deform',
         yAxis: 'bright_avg',
-        zAxis: 'deform'
+        zAxis: 'area_um'
       });
     }
   }, [features, axisSelections.xAxis, onAxisChange, isLoading]);
@@ -49,80 +50,60 @@ const UserControls: React.FC<UserControlsProps> = ({
   };
 
   const handleRecluster = () => {
-    const selectedDimensions = [xAxis, yAxis, zAxis];
-    reclusterData(selectedDimensions);
+    const dimensions = [axisSelections.xAxis, axisSelections.yAxis, axisSelections.zAxis]
+      .filter((dim): dim is string => dim !== null && dim !== '');
+    reclusterData(dimensions);
   };
 
   return (
-    <div style={{
-      display: 'flex',
-      justifyContent: 'flex-end',
-      width: '300px',
-    }}>
-      <form style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '15px',
-        width: '100%',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <label htmlFor="x-axis" style={{ width: '60px' }}>X-axis:</label>
+    <div className="controls-container">
+      <form className="controls-form">
+        <div className="axis-control">
+          <label htmlFor="x-axis" className="axis-label">X-axis:</label>
           <select
             id="x-axis"
-            value={xAxis}
-            onChange={(e) => handleAxisChange('xAxis', e.target.value as AxisOption)}
-            style={{
-              flex: 1,
-              padding: '8px',
-              borderRadius: '4px',
-              border: '1px solid #ccc'
-            }}
+            value={axisSelections.xAxis || ''}
+            onChange={(e) => onAxisChange({ ...axisSelections, xAxis: e.target.value || null })}
+            className="axis-select"
           >
-            {getAvailableOptions('xAxis').map(option => (
-              <option key={option} value={option}>
-                {option.toUpperCase()}
+            <option value="">Select X Axis</option>
+            {features.map(feature => (
+              <option key={feature} value={feature}>
+                {feature.toUpperCase()}
               </option>
             ))}
           </select>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <label htmlFor="y-axis" style={{ width: '60px' }}>Y-axis:</label>
+        <div className="axis-control">
+          <label htmlFor="y-axis" className="axis-label">Y-axis:</label>
           <select
             id="y-axis"
-            value={yAxis}
-            onChange={(e) => handleAxisChange('yAxis', e.target.value as AxisOption)}
-            style={{
-              flex: 1,
-              padding: '8px',
-              borderRadius: '4px',
-              border: '1px solid #ccc'
-            }}
+            value={axisSelections.yAxis || ''}
+            onChange={(e) => onAxisChange({ ...axisSelections, yAxis: e.target.value || null })}
+            className="axis-select"
           >
-            {getAvailableOptions('yAxis').map(option => (
-              <option key={option} value={option}>
-                {option.toUpperCase()}
+            <option value="">Select Y Axis</option>
+            {features.map(feature => (
+              <option key={feature} value={feature}>
+                {feature.toUpperCase()}
               </option>
             ))}
           </select>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <label htmlFor="z-axis" style={{ width: '60px' }}>Z-axis:</label>
+        <div className="axis-control">
+          <label htmlFor="z-axis" className="axis-label">Z-axis:</label>
           <select
             id="z-axis"
-            value={zAxis}
-            onChange={(e) => handleAxisChange('zAxis', e.target.value as AxisOption)}
-            style={{
-              flex: 1,
-              padding: '8px',
-              borderRadius: '4px',
-              border: '1px solid #ccc'
-            }}
+            value={axisSelections.zAxis || ''}
+            onChange={(e) => onAxisChange({ ...axisSelections, zAxis: e.target.value || null })}
+            className="axis-select"
           >
-            {getAvailableOptions('zAxis').map(option => (
-              <option key={option} value={option}>
-                {option.toUpperCase()}
+            <option value="">Select Z Axis</option>
+            {features.map(feature => (
+              <option key={feature} value={feature}>
+                {feature.toUpperCase()}
               </option>
             ))}
           </select>
@@ -131,14 +112,8 @@ const UserControls: React.FC<UserControlsProps> = ({
         <button
           type="button"
           onClick={handleRecluster}
-          style={{
-            padding: '8px',
-            borderRadius: '4px',
-            border: '1px solid #ccc',
-            backgroundColor: '#f0f0f0',
-            cursor: 'pointer',
-            marginTop: '10px'
-          }}
+          className="recluster-button"
+          disabled={!axisSelections.xAxis || !axisSelections.yAxis || !axisSelections.zAxis}
         >
           Recluster Points
         </button>
@@ -149,14 +124,7 @@ const UserControls: React.FC<UserControlsProps> = ({
             const result = await refetchMetadata();
             console.log('Metadata result:', result.data);
           }}
-          style={{
-            padding: '8px',
-            borderRadius: '4px',
-            border: '1px solid #ccc',
-            backgroundColor: '#f0f0f0',
-            cursor: 'pointer',
-            marginTop: '10px'
-          }}
+          className="api-test-button"
         >
           Test Metadata API
         </button>
@@ -167,14 +135,7 @@ const UserControls: React.FC<UserControlsProps> = ({
             const result = await refetchData();
             console.log('Data result:', result.data);
           }}
-          style={{
-            padding: '8px',
-            borderRadius: '4px',
-            border: '1px solid #ccc',
-            backgroundColor: '#f0f0f0',
-            cursor: 'pointer',
-            marginTop: '10px'
-          }}
+          className="api-test-button"
         >
           Test Data API
         </button>

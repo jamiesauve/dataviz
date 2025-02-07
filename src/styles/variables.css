@@ -1,0 +1,69 @@
+:root {
+  /* Colors - Cyberpunk theme */
+  --color-primary: #ff4081;
+  /* Neon pink */
+  --color-secondary: #00ffc8;
+  /* Cyan */
+  --color-accent: #ff9100;
+  /* Neon orange */
+  --color-background: #1a1a1a;
+  /* Dark background */
+  --color-surface: #2d2d2d;
+  /* Slightly lighter background for cards/controls */
+  --color-border: #404040;
+  /* Subtle borders */
+  --color-text: #ffffff;
+  /* White text */
+  --color-text-muted: #808080;
+  /* Muted text */
+  --color-button-hover: #333333;
+  /* Slightly lighter than surface */
+
+  /* Cell type colors - cyberpunk variants */
+  --cell-color-1: #ff4081;
+  /* Neon pink */
+  --cell-color-2: #00ffc8;
+  /* Cyan */
+  --cell-color-3: #ff9100;
+  /* Neon orange */
+  --cell-color-4: #7c4dff;
+  /* Purple */
+  --cell-color-5: #ffeb3b;
+  /* Yellow */
+  --cell-color-6: #76ff03;
+  /* Lime */
+
+  /* Spacing - Multiples of 4px */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 20px;
+  --spacing-xxl: 24px;
+
+  /* Sizes */
+  --control-width: 300px;
+  --border-radius: 4px;
+  --plot-width: 800px;
+}
+
+/* Optional: Add some global styles for the cyberpunk theme */
+body {
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
+
+/* Add a subtle glow effect to buttons and controls */
+button:hover,
+select:hover {
+  box-shadow: 0 0 8px var(--color-primary);
+}
+
+select {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+}
+
+option {
+  background-color: var(--color-surface);
+}

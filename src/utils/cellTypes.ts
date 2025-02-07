@@ -83,10 +83,10 @@ export const CELL_TYPE_NAMES = [
 ];
 
 export const CELL_COLORS = [
-  '#FF4B4B',  // Erythrocyte - Red
-  '#4B4BFF',  // Neutrophil - Blue
-  '#4BFF4B',  // Lymphocyte - Green
-  '#FFB74B',  // Monocyte - Orange
-  '#FF4BFF',  // Eosinophil - Pink
-  '#4BFFFF'   // Basophil - Cyan
+  'var(--cell-color-1)',  // Neon pink
+  'var(--cell-color-2)',  // Cyan
+  'var(--cell-color-3)',  // Neon orange
+  'var(--cell-color-4)',  // Purple
+  'var(--cell-color-5)',  // Yellow
+  'var(--cell-color-6)',  // Lime
 ]; 
